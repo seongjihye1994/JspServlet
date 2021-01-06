@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>GET 방식</title>
+</head>
+<body>
+	<h1>GET 방식</h1>
+	<p>
+		GET 방식은 URL에 데이터를 포함시켜 요청하는 것으로 보안 유지가 불가능함 <br>
+		따라서, 로그인과 같은 경우 get 방식으로 요청하는 것은 부적합하다. <br>
+		GET 방식에서는 데이터를 Header에 포함하여 전송하는데 Body는 보통 빈 상태로 전송되며
+		Header 내용 중 Body의 데이터를 설명하는 Content-Type 헤더 필드도 들어가지 않는다. <br>
+		Header에 데이터가 들어가기 때문에 전송하는 길이에 제한이 있으며 초과 데이터는 절단 된다. <br>
+		캐싱이 가능하다.
+	</p>
+	
+	<h2>개인정보입력 - GET</h2>
+	<p>
+		당신의 개인 정보를 입력하신 뒤 확인 버튼을 눌러주세요.
+	</p>
+	<!-- form 태그의 action 속성에 작성된 servlet으로 요청하게 됨 
+	http://localhost:8800/1_Servlet/test1 -->
+	<form action="/1_Servlet/test1" method="get">
+		<ul style="list-style : none; line-height:200%;">
+			<li>이름 : <input type="text" name="name" size="10"></li>
+			<li>성별 : 
+					남자<input type="radio" name="gender" value="남자">
+					여자<input type="radio" name="gender" value="여자">
+			</li>
+			<li>나이 : 
+					10대 미만<input type="radio" name="age" value="10대 미만">
+					10대<input type="radio" name="age" value="10대">
+					20대<input type="radio" name="age" value="20대">
+					30대<input type="radio" name="age" value="30대">
+					40대<input type="radio" name="age" value="40대">
+					50대<input type="radio" name="age" value="50대">
+					60대<input type="radio" name="age" value="60대">
+			</li>
+			<li>사는 도시 : 
+				<select name="city">
+				<option value="서울">서울</option>
+				<option value="경기">경기</option>
+				<option value="강원">강원</option>
+				<option value="충북">충북</option>
+				<option value="충남">충남</option>
+				<option value="경북">경북</option>
+				<option value="경남">경남</option>
+				<option value="전북">전북</option>
+				<option value="전남">전남</option>
+				<option value="제주">제주</option>
+				</select>
+			</li>
+			<li>키 : 
+				<input type="range" name="height" min="140" max="200" step="1">			
+			</li>
+			<li>좋아하는 음식 (모두 고르세요) :
+				한식<input type="checkbox" name="food" value="한식">
+				중식<input type="checkbox" name="food" value="중식">
+				일식<input type="checkbox" name="food" value="일식">
+				양식<input type="checkbox" name="food" value="양식">
+			</li>
+			<li>
+				<input type="submit" name="btnOK" value="확인">&nbsp;&nbsp;
+				<input type="reset" value="취소">
+			</li>
+		</ul>
+	</form>
+
+</body>
+</html>

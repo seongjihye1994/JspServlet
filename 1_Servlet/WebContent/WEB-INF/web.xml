@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	배포 서술자(Servlet, Fileter, Wrapper 등으로 연결해주는 역할)
+	배포 서술자(DD, Deployment Descriptor)는 Java EE 스펙으로
+	웹 어플리케이션의 기본적인 설정을 위해 작성하는 파일
+	개발자가 web.xml을 수정하지 않고도 개발/운영이 가능하지만 규모가 커지고 필터 서블릿 등을 사용하게 되면 직접 수정해야 함
+ -->
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
   <display-name>1_Servlet</display-name>
   <welcome-file-list>
@@ -9,4 +15,12 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <servlet-name>Test</servlet-name>
+    <servlet-class>com.kh.controller.TestServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Test</servlet-name>
+    <url-pattern>/test</url-pattern>
+  </servlet-mapping>
 </web-app>

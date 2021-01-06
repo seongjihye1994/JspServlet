@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>POST 방식</title>
+</head>
+<body>
+	<h1>POST 방식</h1>
+	<p>
+		POST 방식은 URL에 데이터를 노출하지 않고 요청한다. <br>
+		데이터를 Body에 포함하여 전송하므로 Body의 데이터를 설명하는 Content-Type 헤더 필드가 들어가고 어떤 타입인지
+		명시해 주어야 한다. <br>
+		Body에 데이터가 들어가 전송 길이는 제한이 없지만 최대 요청 받는 시간 (Time Out)이 존재해 페이지 요청, 기다리는 시간이 있다.
+		URL에 데이터가 노출되지 않아 캐싱이 불가능하다.
+		
+	<h2>개인정보입력 - POST</h2>
+	<p>
+		당신의 개인 정보를 입력하신 뒤 확인 버튼을 눌러주세요.
+	</p>
+	<!-- form 태그의 action 속성에 작성된 servlet으로 요청하게 됨 
+	http://localhost:8800/1_Servlet/test1 -->
+	<form action="/1_Servlet/test2" method="post">
+		<ul style="list-style : none; line-height:200%;">
+			<li>이름 : <input type="text" name="name" size="10"></li>
+			<li>성별 : 
+					남자<input type="radio" name="gender" value="남자">
+					여자<input type="radio" name="gender" value="여자">
+			</li>
+			<li>나이 : 
+					10대 미만<input type="radio" name="age" value="10대 미만">
+					10대<input type="radio" name="age" value="10대">
+					20대<input type="radio" name="age" value="20대">
+					30대<input type="radio" name="age" value="30대">
+					40대<input type="radio" name="age" value="40대">
+					50대<input type="radio" name="age" value="50대">
+					60대<input type="radio" name="age" value="60대">
+			</li>
+			<li>사는 도시 : 
+				<select name="city">
+				<option value="서울">서울</option>
+				<option value="경기">경기</option>
+				<option value="강원">강원</option>
+				<option value="충북">충북</option>
+				<option value="충남">충남</option>
+				<option value="경북">경북</option>
+				<option value="경남">경남</option>
+				<option value="전북">전북</option>
+				<option value="전남">전남</option>
+				<option value="제주">제주</option>
+				</select>
+			</li>
+			<li>키 : 
+				<input type="range" name="height" min="140" max="200" step="1">			
+			</li>
+			<li>좋아하는 음식 (모두 고르세요) :
+				한식<input type="checkbox" name="food" value="한식">
+				중식<input type="checkbox" name="food" value="중식">
+				일식<input type="checkbox" name="food" value="일식">
+				양식<input type="checkbox" name="food" value="양식">
+			</li>
+			<li>
+				<input type="submit" name="btnOK" value="확인">&nbsp;&nbsp;
+				<input type="reset" value="취소">
+			</li>
+		</ul>
+	</form>
+	</p>
+
+</body>
+</html>

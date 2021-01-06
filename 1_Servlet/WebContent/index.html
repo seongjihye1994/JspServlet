@@ -21,5 +21,35 @@
 		* Generate web.xml deployment descriptor : 웹 어플리케이션 배치 설명서 파일 자동 생성 옵션 
 	-->
 	<h1>어서와 Web은 처음이지?</h1>
+	
+	<h2>Servlet</h2>
+	<p>
+		서블릿이란, 웹서비스를 위한 "자바클래스"를 말하며, 자바를 사용해 웹을 만들기 위해 필요한 기술 <br>
+		=> 사용자의 요청을 받아 처리하고 그 결과를 다시 사용자에게 전송하는 역할의 class 파일 <br>
+		=> 즉, 웹에서 동적인 페이지를 java로 구현한 서버측 프로그램 (톰켓 서버에세 구동) <br>
+		javax.servlet.http.HttpServlet 클래스를 상속 받는다. <br>
+		<br>
+		다시 말해, 기존의 java 파일에 웹 페이지 구현을 위한 html이 들어간 구조라고 볼 수 있다. <br>
+		클라이언트의 요청을 처리하고 그 결과를 HTML을 사용하여 요청에 대한 응답을 다시 클라이언트에게 전송하는
+		구현 규칙이 있다.
+	</p>
+	
+	<!-- /context root/mapping 명칭 -->
+	<form action="/1_Servlet/test" method="get">
+		<button type="submit">요청</button>
+	</form>
+	
+	<h3><a href="views/testServlet1.html">Servlet-GET 방식</h3>
+	<h3><a href="views/testServlet2.html">Servlet-POST 방식</h3>
+	<h3><a href="views/testServlet3.html">Servlet-JSP 방식</h3>
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </body>
 </html>
