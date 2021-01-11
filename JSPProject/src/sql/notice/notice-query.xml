@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="selectList">
+		SELECT
+				NNO
+			  , NTITLE
+			  , NCONTENT
+			  , NWRITER
+			  , NCOUNT
+			  , NDATE
+			  , STATUS
+		FROM
+		        NOTICE
+		WHERE
+				STATUS = 'Y'
+	 ORDER BY
+	 			NNO DESC
+	</entry>
+</properties>
