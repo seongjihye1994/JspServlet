@@ -32,17 +32,14 @@ public class NoticeListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		// 공지사항에 대한 목록 요청 (넘어온 값 없으므로 추출하지 않고 바로 요청)
 		ArrayList<Notice> list = new NoticeService().selectList();
 		// System.out.println("공지사항 리스트 : " + list);
 		
-		// 공지사항 가지고 화면으로 넘어가기
 		request.setAttribute("list", list);
 		
 		RequestDispatcher view = request.getRequestDispatcher("/views/notice/noticeListView.jsp");
 		view.forward(request, response);
-		
 	}
 
 	/**

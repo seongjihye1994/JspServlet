@@ -3,15 +3,14 @@ package notice.model.vo;
 import java.sql.Date;
 
 public class Notice {
-
-//	NNO	NUMBER
-//	NTITLE	VARCHAR2(100 BYTE)
-//	NCONTENT	VARCHAR2(4000 BYTE)
-//	NWRITER	VARCHAR2(30 BYTE)
-//	NCOUNT	NUMBER
-//	NDATE	DATE
-//	STATUS	VARCHAR2(1 BYTE)
-	
+	/*NNO	NUMBER
+	NTITLE	VARCHAR2(100 BYTE)
+	NCONTENT	VARCHAR2(4000 BYTE)
+	NWRITER	VARCHAR2(30 BYTE)
+	NCOUNT	NUMBER
+	NDATE	DATE
+	STATUS	VARCHAR2(1 BYTE)
+	*/
 	private int nNo;
 	private String nTitle;
 	private String nContent;
@@ -21,8 +20,13 @@ public class Notice {
 	private String status;
 	
 	public Notice() {}
-
 	
+	public Notice(String nTitle, String nContent, String nWriter) {
+		super();
+		this.nTitle = nTitle;
+		this.nContent = nContent;
+		this.nWriter = nWriter;
+	}
 
 	public Notice(int nNo, String nTitle, String nContent, String nWriter, int nCount, Date nDate, String status) {
 		super();
@@ -34,8 +38,6 @@ public class Notice {
 		this.nDate = nDate;
 		this.status = status;
 	}
-
-
 
 	public int getnNo() {
 		return nNo;
@@ -98,7 +100,4 @@ public class Notice {
 		return "Notice [nNo=" + nNo + ", nTitle=" + nTitle + ", nContent=" + nContent + ", nWriter=" + nWriter
 				+ ", nCount=" + nCount + ", nDate=" + nDate + ", status=" + status + "]";
 	}
-	
-	
-
 }

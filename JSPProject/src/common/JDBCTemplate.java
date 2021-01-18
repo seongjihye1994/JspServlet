@@ -12,8 +12,8 @@ import java.util.Properties;
 public class JDBCTemplate {
 	
 	public static Connection getConnection() {
-		Connection conn = null; 
-
+		Connection conn = null;
+		
 		// driver 정보를 저장하여 제공하는 driver.properties 파일을 만들어 읽어오기
 		String fileName = JDBCTemplate.class.getResource("/sql/driver.properties").getPath();
 		// System.out.println("driver.properties 경로 : " + fileName);
@@ -33,16 +33,14 @@ public class JDBCTemplate {
 			// 2. DBMS 연결
 			conn = DriverManager.getConnection(url, user, password);
 			
-			// 3. 자동 커밋 방지(기본 값은 true)
+			// 3. 자동 커밋 방지 (기본 값은 true)
 			conn.setAutoCommit(false);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
@@ -51,57 +49,68 @@ public class JDBCTemplate {
 	
 	public static void close(Connection conn) {
 		try {
-			if (conn != null && !conn.isClosed()) {
+			if(conn != null && !conn.isClosed()) {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public static void close(Statement stmt) {
 		try {
-			if (stmt != null && !stmt.isClosed()) {
+			if(stmt != null && !stmt.isClosed()) {
 				stmt.close();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public static void close(ResultSet rset) {
 		try {
-			if (rset != null && !rset.isClosed()) {
+			if(rset != null && !rset.isClosed()) {
 				rset.close();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public static void commit(Connection conn) {
 		try {
-			if (conn != null && !conn.isClosed()) {
+			if(conn != null && !conn.isClosed()) {
 				conn.commit();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public static void rollback(Connection conn) {
 		try {
-			if (conn != null && !conn.isClosed()) {
+			if(conn != null && !conn.isClosed()) {
 				conn.rollback();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
+
+
+
+
+
+
+
+

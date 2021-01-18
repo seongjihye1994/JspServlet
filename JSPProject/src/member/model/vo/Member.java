@@ -3,22 +3,18 @@ package member.model.vo;
 import java.sql.Date;
 
 public class Member {
-	
-	/*
-	 *  USER_NO   NUMBER
-		USER_ID   VARCHAR2(30 BYTE)
-		USER_PWD   VARCHAR2(100 BYTE)
-		USER_NAME   VARCHAR2(15 BYTE)
-		PHONE   VARCHAR2(13 BYTE)
-		EMAIL   VARCHAR2(100 BYTE)
-		ADDRESS   VARCHAR2(100 BYTE)
-		INTEREST   VARCHAR2(100 BYTE)
-		ENROLL_DATE   DATE
-		MODIFY_DATE   DATE
-		STATUS   VARCHAR2(1 BYTE)
-	 * 
-	 * */
-	
+	/*  USER_NO	NUMBER
+		USER_ID	VARCHAR2(30 BYTE)
+		USER_PWD	VARCHAR2(100 BYTE)
+		USER_NAME	VARCHAR2(15 BYTE)
+		PHONE	VARCHAR2(13 BYTE)
+		EMAIL	VARCHAR2(100 BYTE)
+		ADDRESS	VARCHAR2(100 BYTE)
+		INTEREST	VARCHAR2(100 BYTE)
+		ENROLL_DATE	DATE
+		MODIFY_DATE	DATE
+		STATUS	VARCHAR2(1 BYTE)
+	 */
 	private int userNo;
 	private String userId;
 	private String userPwd;
@@ -32,11 +28,35 @@ public class Member {
 	private String status;
 	
 	public Member() {}
-	
+
 	public Member(String userId, String userPwd) {
 		super();
 		this.userId = userId;
 		this.userPwd = userPwd;
+	}
+	
+	public Member(String userId, String userPwd, String userName, String phone, String email, String address,
+			String interest) {
+		super();
+		this.userId = userId;
+		this.userPwd = userPwd;
+		this.userName = userName;
+		this.phone = phone;
+		this.email = email;
+		this.address = address;
+		this.interest = interest;
+	}
+	
+	
+
+	public Member(String userId, String userName, String phone, String email, String address, String interest) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.phone = phone;
+		this.email = email;
+		this.address = address;
+		this.interest = interest;
 	}
 
 	public Member(int userNo, String userId, String userPwd, String userName, String phone, String email,
@@ -53,33 +73,6 @@ public class Member {
 		this.enrollDate = enrollDate;
 		this.modifyDate = modifyDate;
 		this.status = status;
-	}
-
-	
-
-	public Member(String userId, String userPwd, String userName, String phone, String email, String address,
-			String interest) {
-		super();
-		this.userId = userId;
-		this.userPwd = userPwd;
-		this.userName = userName;
-		this.phone = phone;
-		this.email = email;
-		this.address = address;
-		this.interest = interest;
-	}
-	
-	
-	
-
-	public Member(String userId, String userName, String phone, String email, String address, String interest) {
-		super();
-		this.userId = userId;
-		this.userName = userName;
-		this.phone = phone;
-		this.email = email;
-		this.address = address;
-		this.interest = interest;
 	}
 
 	public int getUserNo() {
@@ -178,7 +171,13 @@ public class Member {
 	}
 	
 	
-	
-	
-
 }
+
+
+
+
+
+
+
+
+

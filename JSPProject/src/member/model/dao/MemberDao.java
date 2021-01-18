@@ -16,7 +16,7 @@ public class MemberDao {
 	public MemberDao() {
 		// MemberDao 객체 생성시마다 member-query.xml 파일에서 쿼리들을 읽어오는 코드
 		String fileName = MemberDao.class.getResource("/sql/member/member-query.xml").getPath();
-	
+		
 		try {
 			prop.loadFromXML(new FileInputStream(fileName));
 		} catch (IOException e) {
@@ -28,7 +28,6 @@ public class MemberDao {
 		Member loginUser = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
-		
 		String sql = prop.getProperty("loginMember");
 		
 		try {
@@ -37,34 +36,33 @@ public class MemberDao {
 			pstmt.setString(1, m.getUserId());
 			pstmt.setString(2, m.getUserPwd());
 			
-			rset = pstmt.executeQuery(); // select문 executeQuery
+			rset = pstmt.executeQuery();
 			
 			if(rset.next()) {
 				loginUser = new Member(rset.getInt("USER_NO"),
-									   rset.getString("USER_ID"),
-									   rset.getString("USER_PWD"),
-									   rset.getString("USER_NAME"),
-									   rset.getString("PHONE"),
-									   rset.getString("EMAIL"),
-									   rset.getString("ADDRESS"),
-									   rset.getString("INTEREST"),
-									   rset.getDate("ENROLL_DATE"),
-									   rset.getDate("MODIFY_DATE"),
-									   rset.getString("STATUS"));
+										rset.getString("USER_ID"),
+										rset.getString("USER_PWD"),
+										rset.getString("USER_NAME"),
+										rset.getString("PHONE"),
+										rset.getString("EMAIL"),
+										rset.getString("ADDRESS"),
+										rset.getString("INTEREST"),
+										rset.getDate("ENROLL_DATE"),
+										rset.getDate("MODIFY_DATE"),
+										rset.getString("STATUS"));
 			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close(rset);
 			close(pstmt);
-		}	
-		
+		}
 		return loginUser;
 	}
-
+	
 	// 2. 회원 가입 처리용 dao
 	public int insertMember(Connection conn, Member mem) {
-		
 		int result = 0;
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty("insertMember");
@@ -92,7 +90,6 @@ public class MemberDao {
 
 	// 3. 회원 정보 수정용 dao
 	public int updateMember(Connection conn, Member m) {
-
 		int result = 0;
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty("updateMember");
@@ -108,7 +105,6 @@ public class MemberDao {
 			pstmt.setString(6, m.getUserId());
 			
 			result = pstmt.executeUpdate();
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -116,24 +112,24 @@ public class MemberDao {
 		}
 		return result;
 	}
-
+	
 	// 4. userId로 회원 한명 조회용 dao
 	public Member selectMember(Connection conn, String userId) {
-		Member loginUser = null;
+		Member mem = null;
+		
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		String sql = prop.getProperty("selectUserOne");
+		String sql = prop.getProperty("selectMember");
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
-			
 			pstmt.setString(1, userId);
 			
-			rset = pstmt.executeQuery(); // select문 executeQuery
+			rset = pstmt.executeQuery();
 			
 			if(rset.next()) {
-				loginUser = new Member(rset.getInt("USER_NO"),
+				mem = new Member(rset.getInt("USER_NO"),
 									   rset.getString("USER_ID"),
 									   rset.getString("USER_PWD"),
 									   rset.getString("USER_NAME"),
@@ -150,15 +146,13 @@ public class MemberDao {
 		} finally {
 			close(rset);
 			close(pstmt);
-		}	
-		
-		return loginUser;
+		}
+		return mem;
 	}
 
 	// 5. 비밀번호 변경용 dao
 	public int updatePwd(Connection conn, String userId, String userPwd, String newPwd) {
 		int result = 0;
-		
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty("updatePwd");
 		
@@ -170,23 +164,18 @@ public class MemberDao {
 			pstmt.setString(3, userPwd);
 			
 			result = pstmt.executeUpdate();
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close(pstmt);
 		}
-		
 		return result;
 	}
-
-	// 5. 회원 탈퇴용 dao
+	
+	// 6. 회원 탈퇴 dao 메소드
 	public int deleteMember(Connection conn, String userId) {
-		
 		int result = 0;
-		
 		PreparedStatement pstmt = null;
-		
 		String sql = prop.getProperty("deleteMember");
 		
 		try {
@@ -199,12 +188,16 @@ public class MemberDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(pstmt);
+			 close(pstmt);
 		}
 		
 		return result;
 	}
-	
-	
 
 }
+
+
+
+
+
+

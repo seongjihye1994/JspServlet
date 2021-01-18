@@ -32,12 +32,12 @@ public class UpdatePwdServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 멤버를 식별할 userId가 필요함 -> 세션에 지정 된 loginUser를 통해서 알아올 수 있음
-		HttpSession session = request.getSession(); // 현재 로그인 된 회원의 세션 객체 얻어오기
-		Member loginUser = (Member) session.getAttribute("loginUser"); // 세션으로부터 로그인 유저 가져오기
-		String userId = loginUser.getUserId(); // 유저 아이디 가져오기
-		String userPwd = request.getParameter("userPwd"); // 현재 비밀번호
-		String newPwd = request.getParameter("newPwd"); // 변경할 비밀번호
+		// userId가 필요함 -> 세션에 저장 된 loginUser를 통해서 알아오자
+		HttpSession session = request.getSession();
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		String userId = loginUser.getUserId();
+		String userPwd = request.getParameter("userPwd");	// 현재 비밀번호
+		String newPwd = request.getParameter("newPwd");		// 변경할 비밀번호
 		
 		// System.out.println(userId + " " + userPwd + " " + newPwd);
 		
@@ -45,9 +45,9 @@ public class UpdatePwdServlet extends HttpServlet {
 		
 		// System.out.println(updateMember);
 		
-		if (updateMember != null) {
+		if(updateMember != null) {
 			// 비밀번호 수정이 잘 되었음을 result-success로 표시
-			request.setAttribute("result","success");
+			request.setAttribute("result", "success");
 			// 수정 된 객체 다시 loginUser에 저장
 			session.setAttribute("loginUser", updateMember);
 		} else {

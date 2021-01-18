@@ -34,20 +34,18 @@ public class DeleteMemberServlet extends HttpServlet {
 		String userId = request.getParameter("userId");
 		int result = new MemberService().deleteMember(userId);
 		
-		if (result > 0) {
+		if(result > 0) {
 			// 회원 탈퇴에 성공한 경우
 			HttpSession session = request.getSession();
-			session.removeAttribute("loginUser");	// 로그인 세션 정보 삭제
+			session.removeAttribute("loginUser");   // 로그인 세션 정보 삭제
 			session.setAttribute("msg", "회원 탈퇴가 완료 되었습니다. 복구 관련 사항은 관리자에게 문의하세요.");
-			// Home으로 이동 (서버에 재요청)
+			// Home으로 이동(서버에 재요청)
 			response.sendRedirect(request.getContextPath());
 		} else {
 			request.setAttribute("msg", "회원 탈퇴에 실패했습니다.");
 			RequestDispatcher view = request.getRequestDispatcher("/views/common/errorPage.jsp");
 			view.forward(request, response);
 		}
-	
-	
 	}
 
 	/**

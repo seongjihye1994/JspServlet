@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+   <entry key="getListCount">
+      SELECT
+            COUNT(*)
+        FROM
+             BOARD
+       WHERE
+             BTYPE = 1
+         AND STATUS = 'Y'
+   </entry>
+   <entry key="selectList">
+   		SELECT
+   				RNUM
+   			  , BID
+   			  , BTYPE
+   			  , CNAME
+   			  , BTITLE
+   			  , BCONTENT
+   			  , USER_NAME
+   			  , BCOUNT
+   			  , CREATE_DATE
+   			  , MODIFY_DATE
+   			  , STATUS
+   		FROM
+   				BLIST
+   		WHERE
+   				RNUM BETWEEN ? AND ?
+   </entry>
+   
+   <entry key="getSearchWriterListCount">  <!-- 게시판 작성자는 MEMBER 테이블과 조인해야 함 -->
+		SELECT
+	            COUNT(*)
+	        FROM
+	             BOARD B
+	             JOIN MEMBER ON(BWRITER = USER_NO)
+	       WHERE
+	             BTYPE = 1 <!-- 게시판 카테고리 -->
+	         AND B.STATUS = 'Y' <!-- STAUS 는 MEMBER와 BOARD 둘 다 있으니 어떤 테이블의 STATUS를 참조할건지 레퍼변수로 명시해야함 -->
+	         AND USER_NAME LIKE '%' || ? || '%'
+   </entry>
+    <entry key="getSearchTitleListCount">
+	    SELECT
+	            COUNT(*)
+	        FROM
+	             BOARD
+	       WHERE
+	             BTYPE = 1 
+	         AND STATUS = 'Y'
+	         AND BTITLE LIKE '%' || ? || '%'
+   </entry>
+    <entry key="getSearchContentListCount">
+		SELECT
+	            COUNT(*)
+	        FROM
+	             BOARD
+	       WHERE
+	             BTYPE = 1 
+	         AND STATUS = 'Y'
+	         AND BCONTENT LIKE '%' || ? || '%'
+   </entry>
+   <entry key="selectSearchWriterList">
+   		SELECT 
+   				RNUM
+   			  , BID
+   			  , BTYPE
+   			  , CNAME
+   			  , BTITLE
+   			  , BCONTENT
+   			  , USER_NAME
+   			  , BCOUNT
+   			  , CREATE_DATE
+   			  , MODIFY_DATE
+   			  , STATUS
+		FROM 
+			  (SELECT 
+			  		   ROWNUM RNUM
+			  		 , A.*
+                 FROM 
+                 	 (SELECT BID
+                 	 	   , BTYPE
+                 	 	   , CNAME
+                 	 	   , BTITLE
+                 	 	   , BCONTENT
+                 	 	   , USER_NAME
+                 	 	   , BCOUNT
+                 	 	   , CREATE_DATE
+                 	 	   , B.MODIFY_DATE
+                 	 	   , B.STATUS
+                       FROM 
+                       		BOARD B
+                            JOIN CATEGORY USING(CID)
+                            JOIN MEMBER ON (BWRITER = USER_NO)
+                       WHERE 
+                       		BTYPE = 1
+                        AND B.STATUS = 'Y'
+                        AND USER_NAME LIKE '%' || ? || '%' -- 제목 조회시 BTITLE LIKE '%1%'
+                   ORDER BY 
+                            BID DESC)
+                   A)
+		  WHERE 
+			    RNUM BETWEEN ? AND ?
+   </entry>
+   <entry key="selectSearchTitleList">
+   	   	SELECT 
+   				RNUM
+   			  , BID
+   			  , BTYPE
+   			  , CNAME
+   			  , BTITLE
+   			  , BCONTENT
+   			  , USER_NAME
+   			  , BCOUNT
+   			  , CREATE_DATE
+   			  , MODIFY_DATE
+   			  , STATUS
+		FROM 
+			  (SELECT 
+			  		   ROWNUM RNUM
+			  		 , A.*
+                 FROM 
+                 	 (SELECT BID
+                 	 	   , BTYPE
+                 	 	   , CNAME
+                 	 	   , BTITLE
+                 	 	   , BCONTENT
+                 	 	   , USER_NAME
+                 	 	   , BCOUNT
+                 	 	   , CREATE_DATE
+                 	 	   , B.MODIFY_DATE
+                 	 	   , B.STATUS
+                       FROM 
+                       		BOARD B
+                            JOIN CATEGORY USING(CID)
+                            JOIN MEMBER ON (BWRITER = USER_NO)
+                       WHERE 
+                       		BTYPE = 1
+                        AND B.STATUS = 'Y'
+                        AND BTITLE LIKE '%' || ? || '%' 
+                   ORDER BY 
+                            BID DESC)
+                   A)
+		  WHERE 
+			    RNUM BETWEEN ? AND ?
+   
+   </entry>
+   <entry key="selectSearchContentList">
+      	SELECT 
+   				RNUM
+   			  , BID
+   			  , BTYPE
+   			  , CNAME
+   			  , BTITLE
+   			  , BCONTENT
+   			  , USER_NAME
+   			  , BCOUNT
+   			  , CREATE_DATE
+   			  , MODIFY_DATE
+   			  , STATUS
+		FROM 
+			  (SELECT 
+			  		   ROWNUM RNUM
+			  		 , A.*
+                 FROM 
+                 	 (SELECT BID
+                 	 	   , BTYPE
+                 	 	   , CNAME
+                 	 	   , BTITLE
+                 	 	   , BCONTENT
+                 	 	   , USER_NAME
+                 	 	   , BCOUNT
+                 	 	   , CREATE_DATE
+                 	 	   , B.MODIFY_DATE
+                 	 	   , B.STATUS
+                       FROM 
+                       		BOARD B
+                            JOIN CATEGORY USING(CID)
+                            JOIN MEMBER ON (BWRITER = USER_NO)
+                       WHERE 
+                       		BTYPE = 1
+                        AND B.STATUS = 'Y'
+                        AND BCONTENT LIKE '%' || ? || '%' -- 제목 조회시 BTITLE LIKE '%1%'
+                   ORDER BY 
+                            BID DESC)
+                   A)
+		  WHERE 
+			    RNUM BETWEEN ? AND ?
+   </entry>
+   <entry key="increaseCount">
+   		UPDATE
+   				BOARD
+   			SET
+   				BCOUNT = BCOUNT + 1
+   		  WHERE
+   		  		BID = ?
+   </entry>
+   <entry key="selectBoard">
+   SELECT BID
+   	 	   , BTYPE
+   	 	   , CNAME
+   	 	   , BTITLE
+   	 	   , BCONTENT
+   	 	   , BWRITER
+   	 	   , USER_NAME
+   	 	   , BCOUNT
+   	 	   , CREATE_DATE
+   	 	   , B.MODIFY_DATE
+   	 	   , B.STATUS
+         FROM 
+         	BOARD B
+            JOIN CATEGORY USING(CID)
+            JOIN MEMBER ON (BWRITER = USER_NO)
+        WHERE 
+         	BTYPE = 1
+        AND B.STATUS = 'Y'
+        AND BID = ?
+   </entry>
+   <entry key="insertBoard">
+   		INSERT
+   		INTO BOARD
+   		(
+   			BID
+   		  , BTYPE
+   		  , CID
+   		  , BTITLE
+   		  , BCONTENT
+   		  , BWRITER
+   		  , BCOUNT
+   		  , CREATE_DATE
+   		  , MODIFY_DATE
+   		  , STATUS
+   		)
+   		VALUES
+   		(
+   			SEQ_BID.NEXTVAL
+   		  , 1
+   		  , ?
+   		  , ?
+   		  , ?
+   		  , ?
+   		  , DEFAULT
+   		  , SYSDATE
+   		  , SYSDATE
+   		  , DEFAULT
+   		)
+   </entry>
+   <entry key="updateBoard">
+   	UPDATE
+   			BOARD
+   		SET
+   		    CID = ?
+   		  , BTITLE = ?
+   		  , BCONTENT = ?
+   		  , MODIFY_DATE = SYSDATE
+   	  WHERE 
+	  		BID = ?               		
+   </entry>
+   <entry key="deleteBoard">
+   		UPDATE
+		       BOARD
+		   SET
+		       STATUS = 'N'
+		 WHERE
+		       BID = ?
+   </entry>
+</properties>
