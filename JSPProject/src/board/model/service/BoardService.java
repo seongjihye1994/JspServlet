@@ -3,8 +3,11 @@ package board.model.service;
 import static common.JDBCTemplate.*;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import board.model.dao.BoardDao;
+import board.model.vo.Attachment;
 import board.model.vo.Board;
 import board.model.vo.PageInfo;
 import board.model.vo.Search;
@@ -142,6 +145,45 @@ public class BoardService {
 		close(conn);
 		
 		return result;
+	}
+
+	// 사진 게시판 리스트 조회
+	public Map<String, Object> selectGalleryList() {
+		Connection conn = getConnection();
+		
+		BoardDao bd = new BoardDao();
+		
+		// 1. btype이 2인 게시글 리스트
+		ArrayList<Board> bList = bd.selectGalleryBoardList(conn);
+		
+		// 2. attachment 테이블 조회
+		ArrayList<Attachment> fList = bd.selectGalleryPhotoList(conn);
+		
+		// 게시글과 사진을 한번에 들고오기 위해 map으로 묶어줌
+		Map<String, Object> map = new HashMap<>();
+		map.put("bList", bList);
+		map.put("fList", fList);
+		
+		return map;
+	}
+
+	// 사진 게시판의 첨부파일(이미지)와 게시글용 서비스
+	public int insertGallery(Board b, ArrayList<Attachment> fileList) {
+		
+		Connection conn = getConnection();
+		BoardDao bd = new BoardDao();
+		// 1. boardInsert
+		int result1 = bd.insertGalleryBoard(conn, b);
+		// 2. AttachmentInsert
+		int result2 = bd.insertGalleryPhoth(conn, fileList);
+		
+		if (result1 > 0 && result2 == fileList.size()) {
+			commit(conn);
+		} else {
+			rollback(conn);
+		}
+		
+		return result1;
 	}
 
 }

@@ -264,4 +264,99 @@
 		 WHERE
 		       BID = ?
    </entry>
+   <entry key="selectGalleryBoardList">
+   		SELECT
+   				BID
+   			  , BTYPE
+   			  , CNAME
+   			  , BTITLE
+   			  , BCONTENT
+   			  , USER_NAME
+   			  , BCOUNT
+   			  , CREATE_DATE
+   			  , B.MODIFY_DATE
+   			  , B.STATUS
+   		   FROM
+   		   		BOARD B
+   		   		JOIN CATEGORY USING (CID)
+   		   		JOIN MEMBER ON (BWRITER = USER_NO)
+   		  WHERE
+   		  		BTYPE = 2
+   		  	AND	B.STATUS = 'Y'
+   	   ORDER BY BID DESC
+   </entry>
+   <entry key="selectGalleryPhotoList">
+   		SELECT
+   				FID
+   			  , BID
+   			  , ORIGIN_NAME
+   			  , CHANGE_NAME
+   			  , FILE_PATH
+   			  , UPLOAD_DATE
+   			  , FILE_LEVEL
+   			  , DOWNLOAD_COUNT
+   			  , STATUS
+   		   FROM
+   		   		ATTACHMENT
+   		  WHERE
+   		  		STATUS = 'Y'
+   		  	AND
+   		  		FILE_LEVEL = 0 <!-- 대표사진(0)만 조회 -->
+   </entry>
+   <entry key="insertGalleryBoard">
+   		INSERT
+   		INTO BOARD
+   		(
+   			BID
+   		  , BTYPE
+   		  , CID
+   		  , BTITLE
+   		  , BCONTENT
+   		  , BWRITER
+   		  , BCOUNT
+   		  , CREATE_DATE
+   		  , MODIFY_DATE
+   		  , STATUS
+   		)
+   		VALUES
+   		(
+   			SEQ_BID.NEXTVAL
+   		  , 2
+   		  , ?
+   		  , ?
+   		  , ?
+   		  , ?
+   		  , DEFAULT
+   		  , SYSDATE
+   		  , SYSDATE
+   		  , DEFAULT
+   		)
+   </entry>
+   <entry key="insertGalleryPhoto">
+   		INSERT
+   		INTO ATTACHMENT
+   		(
+   			FID
+   		  , BID
+   		  , ORIGIN_NAME
+   		  , CHANGE_NAME
+   		  , FILE_PATH
+   		  , UPLOAD_DATE
+   		  , FILE_LEVEL
+   		  , DOWNLOAD_COUNT
+   		  , STATUS
+   		)
+   		VALUES
+   		(
+   			SEQ_FID.NEXTVAL
+   		  , SEQ_BID.CURRVAL <!-- 위에 BOARD 작성글과 매칭 -->
+   		  , ?
+   		  , ?
+   		  , ?
+   		  , SYSDATE
+   		  , ?
+   		  , DEFAULT
+   		  , DEFAULT
+   		)
+   </entry>
 </properties>

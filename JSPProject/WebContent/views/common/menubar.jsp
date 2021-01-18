@@ -213,6 +213,12 @@ integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="ano
 		boardBtn.addEventListener('click', function(){
 			location.href='<%= request.getContextPath() %>/board/list';
 		});
+		
+		// 사진 게시판 버튼
+		const galleryBtn = document.getElementById('galleryBtn');
+		galleryBtn.addEventListener('click', function(){
+			location.href='<%= request.getContextPath() %>/gallery/list';
+		});
 	</script>
 	
 	

@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import board.model.vo.Attachment;
 import board.model.vo.Board;
 import board.model.vo.PageInfo;
 import board.model.vo.Search;
@@ -327,6 +328,131 @@ public class BoardDao {
 		} finally {
 			close(pstmt);
 		}
+		
+		return result;
+	}
+	
+	// 사진 게시판 게시글 조회
+	public ArrayList<Board> selectGalleryBoardList(Connection conn) {
+		
+		Statement stmt = null;
+		ResultSet rset = null;
+		ArrayList<Board> list = new ArrayList<>();
+		String sql = prop.getProperty("selectGalleryBoardList");
+		
+		try {
+			stmt = conn.createStatement(); // 쿼리 세팅
+			
+			rset = stmt.executeQuery(sql); // 쿼리 수행
+			
+			while (rset.next()) { // 조회된 결과값 넣어줌
+				list.add(new Board(rset.getInt("bid"),
+									rset.getInt("btype"),
+									rset.getString("cname"),
+									rset.getString("btitle"),
+									rset.getString("bcontent"),
+									rset.getString("user_name"),
+									rset.getInt("bcount"),
+									rset.getDate("create_date"),
+									rset.getDate("modify_date"),
+									rset.getString("status")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(stmt);
+		}
+		
+		return list;
+	}
+	
+	// 사진 게시판 사진 조회
+	public ArrayList<Attachment> selectGalleryPhotoList(Connection conn) {
+		
+		Statement stmt = null;
+		ResultSet rset = null;
+		ArrayList<Attachment> list = new ArrayList<>();
+		String sql = prop.getProperty("selectGalleryPhotoList");
+		
+		try {
+			stmt = conn.createStatement();
+			
+			rset = stmt.executeQuery(sql);
+			
+			while (rset.next()) {
+				list.add(new Attachment(rset.getInt("fid"),
+										rset.getInt("bid"),
+										rset.getString("origin_name"),
+										rset.getString("change_name"),
+										rset.getString("file_path"),
+										rset.getDate("upload_date"),
+										rset.getInt("file_level"),
+										rset.getInt("download_count"),
+										rset.getString("status")));
+			}
+		} catch (SQLException e) {	
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(stmt);
+		}
+		
+		return list;
+	}
+	
+	// 사진 게시판 게시글 insert용
+	public int insertGalleryBoard(Connection conn, Board b) {
+		
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("insertGalleryBoard");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, Integer.parseInt(b.getCategory()));
+			pstmt.setString(2, b.getbTitle());
+			pstmt.setString(3, b.getbContent());
+			pstmt.setInt(4, b.getUserNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+	
+	// 사진 게시판 첨부파일(이미지) insert용
+	public int insertGalleryPhoth(Connection conn, ArrayList<Attachment> fileList) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("insertGalleryPhoto");
+		
+		// 몇개를 첨부했는지 모르니 반복문 처리
+			try {
+				for (int i = 0; i < fileList.size(); i++) {
+					pstmt = conn.prepareStatement(sql);
+					
+					Attachment at = fileList.get(i);
+					pstmt.setString(1, at.getOriginName());
+					pstmt.setString(2, at.getChangeName());
+					pstmt.setString(3, at.getFilePath());
+					pstmt.setInt(4, at.getFileLevel());
+					
+					// 한 행마다 이 쿼리문을 세팅하므로 누적해서 처리
+					result += pstmt.executeUpdate();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				close(pstmt);
+			}
 		
 		return result;
 	}
