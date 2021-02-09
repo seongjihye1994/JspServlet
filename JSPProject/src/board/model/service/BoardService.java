@@ -10,6 +10,7 @@ import board.model.dao.BoardDao;
 import board.model.vo.Attachment;
 import board.model.vo.Board;
 import board.model.vo.PageInfo;
+import board.model.vo.Reply;
 import board.model.vo.Search;
 
 public class BoardService {
@@ -184,6 +185,73 @@ public class BoardService {
 		}
 		
 		return result1;
+	}
+
+	// 사진 게시판 게시글 상세 조회(첨부파일 조회)
+	public ArrayList<Attachment> selectGalleryPhoto(int bId) {
+		Connection conn = getConnection();
+		ArrayList<Attachment> list = new BoardDao().selectGalleryPhoto(conn, bId);
+		
+		close(conn);
+		
+		return list;
+	}
+
+	// 첨부파일 다운로드 수 증가, 파일 1개 조회용 서비스
+	public Attachment selectAttachment(int fId) {
+		
+		Connection conn = getConnection();
+		BoardDao bd = new BoardDao();
+		
+		// 1. 첨부파일 다운로드 수 증가
+		int result = bd.updateDownloadCount(conn, fId);
+		
+		// 2. 첨부파일 불러오기
+		Attachment at = null;
+		
+		if (result > 0) { // 조회수 증가가 성공하면
+			commit(conn);
+			at = bd.selectAttachment(conn, fId);
+		} else {
+			rollback(conn);
+		}
+		
+		return at;
+	}
+
+	// 선택한 게시글의 댓글 리스트 조회
+	public ArrayList<Reply> selectReplyList(int bId) {
+		Connection conn = getConnection();
+		
+		ArrayList<Reply> rList = new BoardDao().selectReplyList(conn, bId);
+		
+		close(conn);
+		
+		return rList;
+	}
+
+	// 댓글 추가  + 새로 갱신 된 댓글 리스트 조회
+	public ArrayList<Reply> insertReply(Reply r) {
+		
+		Connection conn = getConnection();
+		BoardDao bd = new BoardDao();
+		
+		// 1. 댓글 insert
+		int result = bd.insertReply(conn, r);
+		
+		// 2. 댓글 불러오기
+		ArrayList<Reply> rList = null;
+		
+		if (result > 0) { // 조회수 증가가 성공하면
+			commit(conn);
+			rList = bd.selectReplyList(conn, r.getRefBid());
+		} else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		
+		return rList;
 	}
 
 }

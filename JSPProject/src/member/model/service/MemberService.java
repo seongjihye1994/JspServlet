@@ -90,6 +90,18 @@ public class MemberService {
 		return result;
 	}
 
+	// 아이디 중복 체크
+	public int idCheck(String userId) {
+		
+		Connection conn = getConnection();
+		int result = new MemberDao().idCheck(conn, userId);
+		
+		// DML 구문 아님(단순 셀렉해서 아이디 중복이 있는지 없는지를 확인)
+		close(conn);
+		
+		return result;
+	}
+
 }
 
 

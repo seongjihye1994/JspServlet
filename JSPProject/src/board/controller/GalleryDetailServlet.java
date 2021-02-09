@@ -13,20 +13,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import board.model.service.BoardService;
+import board.model.vo.Attachment;
 import board.model.vo.Board;
-import board.model.vo.Reply;
 
 /**
- * Servlet implementation class BoardDetailServlet
+ * Servlet implementation class GalleryDetailServlet
  */
-@WebServlet("/board/detail")
-public class BoardDetailServlet extends HttpServlet {
+@WebServlet("/gallery/detail")
+public class GalleryDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardDetailServlet() {
+    public GalleryDetailServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,31 +35,9 @@ public class BoardDetailServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		// request.get파라미터로 넘어온 값은 모두 String이기 떄문에 원하는 형변환 진행
 		int bId = Integer.parseInt(request.getParameter("bId"));
-		
-		// 동일 게시글에 대한 조회수 무한 증가 방지 처리 -> cookie 사용
-		
-		/* HTTP 프로토콜
-		 * 요청 -> 연결 -> 응답 -> 연결 해제
-		 * 따라서 해제 된 이후 서버에서는 session을 통해 사용자를 구분함 (ex. 로그인 상태 관리)
-		 * 
-		 * cookie
-		 * 클라이언트 측에 저장
-		 * 팝업창 오늘 다시 보지 않기, 쇼핑몰의 오늘 본 상품
-		 * 
-		 * session
-		 * 서버에서 생성한 session-id를 클라이언트에서는 쿠키를 사용하여 저장
-		 * session-id에 따른 관련 자원은 모두 서버에서 관리
-		 * (중요한 정보는 세션에 저장하는 것이 보안상 좋음)
-		 * 
-		 * 순서
-		 * 1) board/detail 호출시마다 해당 bId가 cookies에 존재하는지 확인하여 존재하지 않는다면
-		 *    이는 처음 읽는 글이므로 Cookie 객체를 생성하여 bId를 저장하고 추가 -> 조회수 증가 + 게시글 조회
-		 * 2) 이 응답에 실린 쿠키를 이제는 클라이언트 측(브라우저)에서 관리함  
-		 * 3) 다음 요청 때 이 쿠키를 함께 전송함
-		 * 4) board/detail 호출 시 해당 bId가 cookies에 존재하는지 확인하여 존재한다면
-		 *    -> 조회수 증가처리 하지 않고 게시글 조회
-		 */
 		
 		// bList라는 이름의 쿠키가 있는지 확인하는 변수
 		boolean flagbList = false;
@@ -113,19 +91,18 @@ public class BoardDetailServlet extends HttpServlet {
 			b = bs.selectBoardNoCnt(bId);
 		}
 		
-		// AJAX 학습 후 댓글 조회 추가
-		ArrayList<Reply> rList = bs.selectReplyList(bId);
+		// 2. 해당 게시글의 첨부파일들 조회
+		ArrayList<Attachment> fileList = bs.selectGalleryPhoto(bId);
 		
-		if(b != null) {
+		if (b != null && fileList != null) {
 			request.setAttribute("board", b);
-			// forwardint 시 rList로 포함시키기
-			request.setAttribute("rList", rList);
-			request.getRequestDispatcher("/views/board/boardDetailView.jsp").forward(request, response);
+			request.setAttribute("fileList", fileList);
+			request.getRequestDispatcher("/views/gallery/galleryDetailView.jsp").forward(request, response);
 		} else {
-			request.setAttribute("msg", "게시글 상세 조회에 실패하였습니다.");
+			request.setAttribute("msg", "사진 게시판 게시글 상세보기에 실패하였습니다.");
 			request.getRequestDispatcher("/views/common/errorPage.jsp").forward(request, response);
 		}
-
+		
 	}
 
 	/**

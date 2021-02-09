@@ -106,7 +106,7 @@
 				</span>
 				<div class="btnArea">
 					<button id="goMainBtn" type="button">메인으로</button>
-					<button id="joinBtn">가입하기</button>
+					<button id="joinBtn" disabled>가입하기</button>
 				</div>
 			</form>
 		</div>
@@ -144,6 +144,63 @@
 			
 			return true;
 		}
+		
+		$(function() {
+			// 아이디 중복 시 false, 아이디 사용 가능 시 true --> 유효성 검사를 위한 변수
+			var isUsable = false;
+			
+			$("#idCheck").click(function() {
+				var userId = $("#joinForm input[name='userId']");
+				
+				if (!userId || userId.val().length < 4) { // !userId : undefined가 아닐 때
+					alert("아이디는 최소 4자리 이상이어야 합니다.");
+					userId.focus();					
+				} else {
+					// 4자리 이사의 userId 값을 입력했을 경우 $.ajax() 통신
+					$.ajax({
+						url : "<%= request.getContextPath() %>/member/idCheck",
+						type : "post",
+						data : {userId : userId.val()},
+						success : function(data) {
+							console.log(data);
+							
+							if (data == "fail") {
+								alert("사용할 수 없는 아이디입니다.");
+								userId.focus();
+							} else {
+								// alert("사용 가능한 아이디입니다.");
+								if (confirm("사용 가능한 아이디입니다. 사용 하시겠습니까?")) {
+									userId.prop('readonly', true); // 더 이상 id 입력 공간을 바꿀 수 없도록
+									isUsable = true;	// 사용 가능한 아이디라는 flag 값 --> submit o
+								} else {
+									// confirm 창에서 취소를 눌르 경우 (처음, 또는 반복해서)
+									userId.prop('readonly', false);	// 다시 id input 태그 수정 가능하도록
+									isUsable = false;	// 사용 불가능한 아이디 flag 값 --> submit x
+									userId.focus();
+								}
+							}
+							
+							// 아이디 중복 체크 후 중복이 아니며 사용하겠다고 선택한 경우
+							// joinBtn disabled 제거
+							if (isUsable) {
+								$("#joinBtn").removeAttr("disabled");
+							} else {
+								$("#joinBtn").attr("disabled", true);
+							}
+						},
+						error : function() {
+							console.log(data);
+						}
+					});
+					
+				}
+			});
+		});
+		
+		
+		
+		
+		
 	</script>
 </body>
 </html>

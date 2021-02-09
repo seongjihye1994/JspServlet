@@ -1,362 +1,448 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-   <entry key="getListCount">
-      SELECT
-            COUNT(*)
-        FROM
-             BOARD
-       WHERE
-             BTYPE = 1
-         AND STATUS = 'Y'
-   </entry>
-   <entry key="selectList">
-   		SELECT
-   				RNUM
-   			  , BID
-   			  , BTYPE
-   			  , CNAME
-   			  , BTITLE
-   			  , BCONTENT
-   			  , USER_NAME
-   			  , BCOUNT
-   			  , CREATE_DATE
-   			  , MODIFY_DATE
-   			  , STATUS
-   		FROM
-   				BLIST
-   		WHERE
-   				RNUM BETWEEN ? AND ?
-   </entry>
-   
-   <entry key="getSearchWriterListCount">  <!-- 게시판 작성자는 MEMBER 테이블과 조인해야 함 -->
+	<entry key="getListCount">
 		SELECT
-	            COUNT(*)
-	        FROM
-	             BOARD B
-	             JOIN MEMBER ON(BWRITER = USER_NO)
-	       WHERE
-	             BTYPE = 1 <!-- 게시판 카테고리 -->
-	         AND B.STATUS = 'Y' <!-- STAUS 는 MEMBER와 BOARD 둘 다 있으니 어떤 테이블의 STATUS를 참조할건지 레퍼변수로 명시해야함 -->
-	         AND USER_NAME LIKE '%' || ? || '%'
-   </entry>
-    <entry key="getSearchTitleListCount">
-	    SELECT
-	            COUNT(*)
-	        FROM
-	             BOARD
-	       WHERE
-	             BTYPE = 1 
-	         AND STATUS = 'Y'
-	         AND BTITLE LIKE '%' || ? || '%'
-   </entry>
-    <entry key="getSearchContentListCount">
+		       COUNT(*)
+		  FROM
+		       BOARD
+		 WHERE
+		       BTYPE = 1
+		   AND STATUS = 'Y'
+	</entry>
+	<entry key="selectList">
 		SELECT
-	            COUNT(*)
-	        FROM
-	             BOARD
-	       WHERE
-	             BTYPE = 1 
-	         AND STATUS = 'Y'
-	         AND BCONTENT LIKE '%' || ? || '%'
-   </entry>
-   <entry key="selectSearchWriterList">
-   		SELECT 
-   				RNUM
-   			  , BID
-   			  , BTYPE
-   			  , CNAME
-   			  , BTITLE
-   			  , BCONTENT
-   			  , USER_NAME
-   			  , BCOUNT
-   			  , CREATE_DATE
-   			  , MODIFY_DATE
-   			  , STATUS
-		FROM 
-			  (SELECT 
-			  		   ROWNUM RNUM
-			  		 , A.*
-                 FROM 
-                 	 (SELECT BID
-                 	 	   , BTYPE
-                 	 	   , CNAME
-                 	 	   , BTITLE
-                 	 	   , BCONTENT
-                 	 	   , USER_NAME
-                 	 	   , BCOUNT
-                 	 	   , CREATE_DATE
-                 	 	   , B.MODIFY_DATE
-                 	 	   , B.STATUS
-                       FROM 
-                       		BOARD B
-                            JOIN CATEGORY USING(CID)
-                            JOIN MEMBER ON (BWRITER = USER_NO)
-                       WHERE 
-                       		BTYPE = 1
-                        AND B.STATUS = 'Y'
-                        AND USER_NAME LIKE '%' || ? || '%' -- 제목 조회시 BTITLE LIKE '%1%'
-                   ORDER BY 
-                            BID DESC)
-                   A)
+		       RNUM
+		     , BID
+		     , BTYPE
+		     , CNAME
+		     , BTITLE
+		     , BCONTENT
+		     , USER_NAME
+		     , BCOUNT
+		     , CREATE_DATE
+		     , MODIFY_DATE
+		     , STATUS
+		  FROM
+		       BLIST
+		 WHERE
+		       RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="getSearchWriterListCount">
+		SELECT
+		       COUNT(*)
+		  FROM
+		       BOARD B
+		       JOIN MEMBER ON(BWRITER = USER_NO)
+		 WHERE
+		       BTYPE = 1
+		   AND B.STATUS = 'Y'
+		   AND USER_NAME LIKE '%' || ? || '%'
+	</entry>
+	<entry key="getSearchTitleListCount">
+		SELECT
+		       COUNT(*)
+		  FROM
+		       BOARD
+		 WHERE
+		       BTYPE = 1
+		   AND STATUS = 'Y'
+		   AND BTITLE LIKE '%' || ? || '%'
+	</entry>
+	<entry key="getSearchContentListCount">
+		SELECT
+		       COUNT(*)
+		  FROM
+		       BOARD
+		 WHERE
+		       BTYPE = 1
+		   AND STATUS = 'Y'
+		   AND BCONTENT LIKE '%' || ? || '%'
+	</entry>
+	<entry key="selectSearchWriterList">
+		SELECT 
+		       RNUM
+		     , BID
+		     , BTYPE
+		     , CNAME
+		     , BTITLE
+		     , BCONTENT
+		     , USER_NAME
+		     , BCOUNT
+		     , CREATE_DATE
+		     , MODIFY_DATE
+		     , STATUS
+		 FROM
+		      (SELECT 
+		              ROWNUM RNUM
+		            , A.*
+                 FROM
+                      (SELECT 
+                              BID
+                            , BTYPE
+                            , CNAME
+                            , BTITLE
+                            , BCONTENT
+                            , USER_NAME
+                            , BCOUNT
+                            , CREATE_DATE
+                            , B.MODIFY_DATE
+                            , B.STATUS
+                         FROM 
+                              BOARD B
+                              JOIN CATEGORY USING(CID)
+                              JOIN MEMBER ON (BWRITER = USER_NO)
+                        WHERE 
+                              BTYPE = 1
+                          AND B.STATUS = 'Y'
+                          AND USER_NAME LIKE '%' || ? || '%'
+                     ORDER BY 
+                              BID DESC) 
+                      A)
 		  WHERE 
 			    RNUM BETWEEN ? AND ?
-   </entry>
-   <entry key="selectSearchTitleList">
-   	   	SELECT 
-   				RNUM
-   			  , BID
-   			  , BTYPE
-   			  , CNAME
-   			  , BTITLE
-   			  , BCONTENT
-   			  , USER_NAME
-   			  , BCOUNT
-   			  , CREATE_DATE
-   			  , MODIFY_DATE
-   			  , STATUS
-		FROM 
-			  (SELECT 
-			  		   ROWNUM RNUM
-			  		 , A.*
-                 FROM 
-                 	 (SELECT BID
-                 	 	   , BTYPE
-                 	 	   , CNAME
-                 	 	   , BTITLE
-                 	 	   , BCONTENT
-                 	 	   , USER_NAME
-                 	 	   , BCOUNT
-                 	 	   , CREATE_DATE
-                 	 	   , B.MODIFY_DATE
-                 	 	   , B.STATUS
-                       FROM 
-                       		BOARD B
-                            JOIN CATEGORY USING(CID)
-                            JOIN MEMBER ON (BWRITER = USER_NO)
-                       WHERE 
-                       		BTYPE = 1
-                        AND B.STATUS = 'Y'
-                        AND BTITLE LIKE '%' || ? || '%' 
-                   ORDER BY 
-                            BID DESC)
-                   A)
+	</entry>
+	<entry key="selectSearchTitleList">
+		SELECT 
+		       RNUM
+		     , BID
+		     , BTYPE
+		     , CNAME
+		     , BTITLE
+		     , BCONTENT
+		     , USER_NAME
+		     , BCOUNT
+		     , CREATE_DATE
+		     , MODIFY_DATE
+		     , STATUS
+		 FROM
+		      (SELECT 
+		              ROWNUM RNUM
+		            , A.*
+                 FROM
+                      (SELECT 
+                              BID
+                            , BTYPE
+                            , CNAME
+                            , BTITLE
+                            , BCONTENT
+                            , USER_NAME
+                            , BCOUNT
+                            , CREATE_DATE
+                            , B.MODIFY_DATE
+                            , B.STATUS
+                         FROM 
+                              BOARD B
+                              JOIN CATEGORY USING(CID)
+                              JOIN MEMBER ON (BWRITER = USER_NO)
+                        WHERE 
+                              BTYPE = 1
+                          AND B.STATUS = 'Y'
+                          AND BTITLE LIKE '%' || ? || '%'
+                     ORDER BY 
+                              BID DESC) 
+                      A)
 		  WHERE 
 			    RNUM BETWEEN ? AND ?
-   
-   </entry>
-   <entry key="selectSearchContentList">
-      	SELECT 
-   				RNUM
-   			  , BID
-   			  , BTYPE
-   			  , CNAME
-   			  , BTITLE
-   			  , BCONTENT
-   			  , USER_NAME
-   			  , BCOUNT
-   			  , CREATE_DATE
-   			  , MODIFY_DATE
-   			  , STATUS
-		FROM 
-			  (SELECT 
-			  		   ROWNUM RNUM
-			  		 , A.*
-                 FROM 
-                 	 (SELECT BID
-                 	 	   , BTYPE
-                 	 	   , CNAME
-                 	 	   , BTITLE
-                 	 	   , BCONTENT
-                 	 	   , USER_NAME
-                 	 	   , BCOUNT
-                 	 	   , CREATE_DATE
-                 	 	   , B.MODIFY_DATE
-                 	 	   , B.STATUS
-                       FROM 
-                       		BOARD B
-                            JOIN CATEGORY USING(CID)
-                            JOIN MEMBER ON (BWRITER = USER_NO)
-                       WHERE 
-                       		BTYPE = 1
-                        AND B.STATUS = 'Y'
-                        AND BCONTENT LIKE '%' || ? || '%' -- 제목 조회시 BTITLE LIKE '%1%'
-                   ORDER BY 
-                            BID DESC)
-                   A)
+	</entry>
+	<entry key="selectSearchContentList">
+	SELECT 
+		       RNUM
+		     , BID
+		     , BTYPE
+		     , CNAME
+		     , BTITLE
+		     , BCONTENT
+		     , USER_NAME
+		     , BCOUNT
+		     , CREATE_DATE
+		     , MODIFY_DATE
+		     , STATUS
+		 FROM
+		      (SELECT 
+		              ROWNUM RNUM
+		            , A.*
+                 FROM
+                      (SELECT 
+                              BID
+                            , BTYPE
+                            , CNAME
+                            , BTITLE
+                            , BCONTENT
+                            , USER_NAME
+                            , BCOUNT
+                            , CREATE_DATE
+                            , B.MODIFY_DATE
+                            , B.STATUS
+                         FROM 
+                              BOARD B
+                              JOIN CATEGORY USING(CID)
+                              JOIN MEMBER ON (BWRITER = USER_NO)
+                        WHERE 
+                              BTYPE = 1
+                          AND B.STATUS = 'Y'
+                          AND BCONTENT LIKE '%' || ? || '%'
+                     ORDER BY 
+                              BID DESC) 
+                      A)
 		  WHERE 
 			    RNUM BETWEEN ? AND ?
-   </entry>
-   <entry key="increaseCount">
-   		UPDATE
-   				BOARD
-   			SET
-   				BCOUNT = BCOUNT + 1
-   		  WHERE
-   		  		BID = ?
-   </entry>
-   <entry key="selectBoard">
-   SELECT BID
-   	 	   , BTYPE
-   	 	   , CNAME
-   	 	   , BTITLE
-   	 	   , BCONTENT
-   	 	   , BWRITER
-   	 	   , USER_NAME
-   	 	   , BCOUNT
-   	 	   , CREATE_DATE
-   	 	   , B.MODIFY_DATE
-   	 	   , B.STATUS
-         FROM 
-         	BOARD B
-            JOIN CATEGORY USING(CID)
-            JOIN MEMBER ON (BWRITER = USER_NO)
-        WHERE 
-         	BTYPE = 1
-        AND B.STATUS = 'Y'
-        AND BID = ?
-   </entry>
-   <entry key="insertBoard">
-   		INSERT
-   		INTO BOARD
-   		(
-   			BID
-   		  , BTYPE
-   		  , CID
-   		  , BTITLE
-   		  , BCONTENT
-   		  , BWRITER
-   		  , BCOUNT
-   		  , CREATE_DATE
-   		  , MODIFY_DATE
-   		  , STATUS
-   		)
-   		VALUES
-   		(
-   			SEQ_BID.NEXTVAL
-   		  , 1
-   		  , ?
-   		  , ?
-   		  , ?
-   		  , ?
-   		  , DEFAULT
-   		  , SYSDATE
-   		  , SYSDATE
-   		  , DEFAULT
-   		)
-   </entry>
-   <entry key="updateBoard">
-   	UPDATE
-   			BOARD
-   		SET
-   		    CID = ?
-   		  , BTITLE = ?
-   		  , BCONTENT = ?
-   		  , MODIFY_DATE = SYSDATE
-   	  WHERE 
-	  		BID = ?               		
-   </entry>
-   <entry key="deleteBoard">
-   		UPDATE
+	</entry>
+	<entry key="increaseCount">
+		UPDATE
 		       BOARD
 		   SET
-		       STATUS = 'N'
+		       BCOUNT = BCOUNT + 1
 		 WHERE
 		       BID = ?
-   </entry>
-   <entry key="selectGalleryBoardList">
-   		SELECT
-   				BID
-   			  , BTYPE
-   			  , CNAME
-   			  , BTITLE
-   			  , BCONTENT
-   			  , USER_NAME
-   			  , BCOUNT
-   			  , CREATE_DATE
-   			  , B.MODIFY_DATE
-   			  , B.STATUS
-   		   FROM
-   		   		BOARD B
-   		   		JOIN CATEGORY USING (CID)
-   		   		JOIN MEMBER ON (BWRITER = USER_NO)
-   		  WHERE
-   		  		BTYPE = 2
-   		  	AND	B.STATUS = 'Y'
-   	   ORDER BY BID DESC
-   </entry>
-   <entry key="selectGalleryPhotoList">
-   		SELECT
-   				FID
-   			  , BID
-   			  , ORIGIN_NAME
-   			  , CHANGE_NAME
-   			  , FILE_PATH
-   			  , UPLOAD_DATE
-   			  , FILE_LEVEL
-   			  , DOWNLOAD_COUNT
-   			  , STATUS
-   		   FROM
-   		   		ATTACHMENT
-   		  WHERE
-   		  		STATUS = 'Y'
-   		  	AND
-   		  		FILE_LEVEL = 0 <!-- 대표사진(0)만 조회 -->
-   </entry>
-   <entry key="insertGalleryBoard">
-   		INSERT
-   		INTO BOARD
-   		(
-   			BID
-   		  , BTYPE
-   		  , CID
-   		  , BTITLE
-   		  , BCONTENT
-   		  , BWRITER
-   		  , BCOUNT
-   		  , CREATE_DATE
-   		  , MODIFY_DATE
-   		  , STATUS
-   		)
-   		VALUES
-   		(
-   			SEQ_BID.NEXTVAL
-   		  , 2
-   		  , ?
-   		  , ?
-   		  , ?
-   		  , ?
-   		  , DEFAULT
-   		  , SYSDATE
-   		  , SYSDATE
-   		  , DEFAULT
-   		)
-   </entry>
-   <entry key="insertGalleryPhoto">
-   		INSERT
-   		INTO ATTACHMENT
-   		(
-   			FID
-   		  , BID
-   		  , ORIGIN_NAME
-   		  , CHANGE_NAME
-   		  , FILE_PATH
-   		  , UPLOAD_DATE
-   		  , FILE_LEVEL
-   		  , DOWNLOAD_COUNT
-   		  , STATUS
-   		)
-   		VALUES
-   		(
-   			SEQ_FID.NEXTVAL
-   		  , SEQ_BID.CURRVAL <!-- 위에 BOARD 작성글과 매칭 -->
-   		  , ?
-   		  , ?
-   		  , ?
-   		  , SYSDATE
-   		  , ?
-   		  , DEFAULT
-   		  , DEFAULT
-   		)
-   </entry>
+	</entry>
+	<entry key="selectBoard">
+		SELECT 
+	           BID
+	         , BTYPE
+	         , CNAME
+	         , BTITLE
+	         , BCONTENT
+	         , BWRITER
+	         , USER_NAME
+	         , BCOUNT
+	         , CREATE_DATE
+	         , B.MODIFY_DATE
+	         , B.STATUS
+          FROM 
+               BOARD B
+               JOIN CATEGORY USING(CID)
+               JOIN MEMBER ON (BWRITER = USER_NO)
+         WHERE 
+               B.STATUS = 'Y'
+		   AND BID = ?
+	</entry>
+	<entry key="insertBoard">
+		INSERT
+		INTO BOARD
+		(
+			BID
+		  , BTYPE
+		  , CID
+		  , BTITLE
+		  , BCONTENT
+		  , BWRITER
+		  , BCOUNT
+		  , CREATE_DATE
+		  , MODIFY_DATE
+		  , STATUS
+		)
+		VALUES
+		(
+			SEQ_BID.NEXTVAL
+		  , 1
+		  , ?
+		  , ?
+		  , ?
+		  , ?
+		  , DEFAULT
+		  , SYSDATE
+		  , SYSDATE
+		  , DEFAULT
+		)
+	</entry>
+	<entry key="updateBoard">
+		UPDATE 
+		       BOARD 
+		   SET 
+		       CID = ?
+		     , BTITLE = ?
+		     , BCONTENT = ?
+		     , MODIFY_DATE = SYSDATE 
+		 WHERE 
+		       BID = ?
+	</entry>
+	<entry key="deleteBoard">
+		UPDATE 
+		       BOARD 
+		   SET 
+		       STATUS = 'N' 
+		 WHERE 
+		       BID = ?
+	</entry>
+	<entry key="selectGalleryBoardList">
+		SELECT
+		       BID
+		     , BTYPE
+		     , CNAME
+		     , BTITLE
+		     , BCONTENT
+		     , USER_NAME
+		     , BCOUNT
+		     , CREATE_DATE
+		     , B.MODIFY_DATE
+		     , B.STATUS
+		  FROM
+		       BOARD B
+		       JOIN CATEGORY USING (CID)
+		       JOIN MEMBER ON (BWRITER = USER_NO)
+		 WHERE
+		       BTYPE = 2
+		   AND B.STATUS = 'Y'
+	  ORDER BY BID DESC	
+	</entry>
+	<entry key="selectGalleryPhotoList">
+		SELECT
+		       FID
+		     , BID
+		     , ORIGIN_NAME
+		     , CHANGE_NAME
+		     , FILE_PATH
+		     , UPLOAD_DATE
+		     , FILE_LEVEL
+		     , DOWNLOAD_COUNT
+		     , STATUS
+		  FROM
+		       ATTACHMENT
+		 WHERE
+		       STATUS = 'Y'
+		   AND
+		       FILE_LEVEL = 0
+	</entry>
+	<entry key="insertGalleryBoard">
+		INSERT
+		INTO BOARD
+		(
+			BID
+		  , BTYPE
+		  , CID
+		  , BTITLE
+		  , BCONTENT
+		  , BWRITER
+		  , BCOUNT
+		  , CREATE_DATE
+		  , MODIFY_DATE
+		  , STATUS
+		)
+		VALUES
+		(
+			SEQ_BID.NEXTVAL
+		  , 2
+		  , ?
+		  , ?
+		  , ?
+		  , ?
+		  , DEFAULT
+		  , SYSDATE
+		  , SYSDATE
+		  , DEFAULT
+		)
+	</entry>
+	<entry key="insertGalleryPhoto">
+		INSERT INTO
+		ATTACHMENT
+		(
+			FID
+		  , BID
+		  , ORIGIN_NAME
+		  , CHANGE_NAME
+		  , FILE_PATH
+		  , UPLOAD_DATE
+		  , FILE_LEVEL
+		  , DOWNLOAD_COUNT
+		  , STATUS
+		)
+		VALUES
+		(
+			SEQ_FID.NEXTVAL
+		  , SEQ_BID.CURRVAL
+		  , ?
+		  , ?
+		  , ?
+		  , SYSDATE
+		  , ?
+		  , DEFAULT
+		  , DEFAULT
+		)
+	</entry>
+	<entry key="selectGalleryPhoto">
+		SELECT
+			   FID
+			 , BID
+			 , ORIGIN_NAME
+			 , CHANGE_NAME
+			 , FILE_PATH
+			 , UPLOAD_DATE
+			 , FILE_LEVEL
+			 , DOWNLOAD_COUNT
+			 , STATUS
+	      FROM
+	           ATTACHMENT
+	     WHERE
+	           BID = ?
+	       AND STATUS = 'Y'
+	  ORDER BY FID
+	</entry>
+	<entry key="updateDownloadCount">
+		UPDATE
+		       ATTACHMENT
+		   SET
+		       DOWNLOAD_COUNT = DOWNLOAD_COUNT + 1
+		 WHERE
+		       FID = ?
+	</entry>
+	<entry key="selectAttachment">
+		SELECT
+			   FID
+			 , BID
+			 , ORIGIN_NAME
+			 , CHANGE_NAME
+			 , FILE_PATH
+			 , UPLOAD_DATE
+			 , FILE_LEVEL
+			 , DOWNLOAD_COUNT
+			 , STATUS
+	      FROM
+	           ATTACHMENT
+	     WHERE
+	           FID = ?
+	       AND STATUS = 'Y'
+	</entry>
+	<entry key="selectReplyList">
+		SELECT
+		       RID
+		     , RCONTENT
+		     , REF_BID
+		     , RWRITER
+		     , USER_NAME
+		     , CREATE_DATE
+		     , R.MODIFY_DATE
+		     , R.STATUS
+  		  FROM 
+		       REPLY R
+		       JOIN MEMBER M ON (R.RWRITER = M.USER_NO)
+ 		 WHERE
+		       R.STATUS = 'Y'
+		   AND REF_BID = ?
+	  ORDER BY 
+        	   RID DESC
+	</entry>
+	<entry key="insertReply">
+		INSERT 
+		INTO REPLY
+		(
+			RID
+		  , RCONTENT
+		  , REF_BID
+		  , RWRITER
+		  , CREATE_DATE
+		  , MODIFY_DATE
+		  , STATUS
+		)
+		VALUES
+		(
+			SEQ_RID.NEXTVAL
+		  , ?
+		  , ?
+		  , ?
+		  , SYSDATE
+		  , SYSDATE
+		  , DEFAULT
+		)
+	</entry>
 </properties>

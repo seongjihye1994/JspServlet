@@ -75,8 +75,7 @@
 	<%@ include file="../common/menubar.jsp" %>
 	<div class="outer">
 	<!-- 파일 업로드를 위해서는 반드시 enctype="multipart/form-data 을 지정해주어야 함 -->
-		<form action="<%= request.getContextPath() %>/gallery/insert"
-		method="post" enctype="multipart/form-data">
+		<form action="<%= request.getContextPath() %>/gallery/insert" method="post" enctype="multipart/form-data">
 			<div class="insertArea">
 				<h1>사진 게시글 작성</h1>
 				

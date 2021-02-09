@@ -30,7 +30,8 @@ public class BoardInsertServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
+		// request.setCharacterEncoding("UTF-8");
+		// CommonFilter 처리 후 주석
 		
 		String category = request.getParameter("category");
 		String title = request.getParameter("title");

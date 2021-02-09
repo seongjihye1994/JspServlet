@@ -67,6 +67,7 @@
 			<h1>사진 게시판</h1>
 			<% for (Board b : bList) { %>
 			<div class="gallery_list">
+			<input type="hidden" value="<%= b.getbId() %>">
 				<div>
 					<% for (Attachment at : fList) { %>
 						<% if(b.getbId() == at.getbId()) { %>
@@ -88,6 +89,16 @@
 		</div>
 		<% } %>
 	</div>
+	
+	<script>
+		$(function() {
+			$(".gallery_list").click(function() {
+				var bId = $(this).children().eq(0).val();
+				location.href='<%= request.getContextPath() %>/gallery/detail?bId=' + bId;
+			});
+		});
+	
+	</script>
 
 </body>
 </html>

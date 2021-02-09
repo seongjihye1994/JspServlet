@@ -13,6 +13,7 @@ import java.util.Properties;
 import board.model.vo.Attachment;
 import board.model.vo.Board;
 import board.model.vo.PageInfo;
+import board.model.vo.Reply;
 import board.model.vo.Search;
 
 import static common.JDBCTemplate.close;
@@ -28,7 +29,7 @@ public class BoardDao {
          e.printStackTrace();
       }
    }
-   //게시글 총 개수 조회
+   // 게시글 총 개수 조회
    public int getListCount(Connection conn) {
       int listCount = 0;
       Statement stmt = null;
@@ -453,6 +454,159 @@ public class BoardDao {
 			} finally {
 				close(pstmt);
 			}
+		
+		return result;
+	}
+	
+	// 사진게시글 상세 조회(첨부파일 조회)
+	public ArrayList<Attachment> selectGalleryPhoto(Connection conn, int bId) {
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		ArrayList<Attachment> list = new ArrayList<>();
+		String sql = prop.getProperty("selectGalleryPhoto");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, bId);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				list.add(new Attachment(rset.getInt("fid"),
+										rset.getInt("bid"),
+										rset.getString("origin_name"),
+										rset.getString("change_name"),
+										rset.getString("file_path"),
+										rset.getDate("upload_date"),
+										rset.getInt("file_level"),
+										rset.getInt("download_count"),
+										rset.getString("status")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		
+		return list;
+	}
+	
+	// 첨부파일 다운로드 수 증가
+	public int updateDownloadCount(Connection conn, int fId) {
+		
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("updateDownloadCount");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, fId);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+	
+	// 다운로드할 첨부파일 선택
+	public Attachment selectAttachment(Connection conn, int fId) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		Attachment at = null;
+		String sql = prop.getProperty("selectAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, fId);
+			
+			rset = pstmt.executeQuery();
+			
+			if (rset.next()) {
+				at = new Attachment();
+				at.setOriginName(rset.getString("origin_name")); // 사용자가 해당 첨부파일을 다운받을 땐 업로드 시 원래 이름으로 다운받도록
+				at.setChangeName(rset.getString("change_name")); // 해당 파일을 찾아오기 위해서는 변경한 이름도 저장
+				at.setFilePath(rset.getString("file_path"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+
+		return at;
+	}
+	
+	// 게시글 당 댓글 리스트 조회
+	public ArrayList<Reply> selectReplyList(Connection conn, int bId) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		ArrayList<Reply> rList = new ArrayList<Reply>();
+		String sql = prop.getProperty("selectReplyList");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bId);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				rList.add(new Reply(rset.getInt("rid"),
+									rset.getString("rcontent"),
+									rset.getInt("ref_bid"),
+									rset.getInt("rwriter"),
+									rset.getString("user_name"),
+									rset.getDate("create_date"),
+									rset.getDate("modify_date"),
+									rset.getString("status")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return rList;
+	}
+	
+	// 댓글 insert
+	public int insertReply(Connection conn, Reply r) {
+		
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("insertReply");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			// 쿼리 세팅
+			pstmt.setString(1, r.getrContent());
+			pstmt.setInt(2, r.getRefBid()); 
+			pstmt.setInt(3, r.getrWriter());
+			
+			// 쿼리수행
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
 		
 		return result;
 	}
