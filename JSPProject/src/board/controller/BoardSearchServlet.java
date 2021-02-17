@@ -74,7 +74,7 @@ public class BoardSearchServlet extends HttpServlet {
 		request.setAttribute("pi", pi); // 페이지 인포메이션
 		request.setAttribute("search", s); // 검색창에 남아있게 할 키워드
 		
-		RequestDispatcher view = request.getRequestDispatcher("/views/board/boardListView.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("/views/board/boardListView2.jsp");
 		view.forward(request, response);
 	}
 

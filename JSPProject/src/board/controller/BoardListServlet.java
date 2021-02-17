@@ -93,7 +93,7 @@ public class BoardListServlet extends HttpServlet {
 		request.setAttribute("pi", pi);
 		request.setAttribute("list", list);
 		
-		RequestDispatcher view = request.getRequestDispatcher("/views/board/boardListView.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("/views/board/boardListView2.jsp");
 		view.forward(request, response);
 		
 	}

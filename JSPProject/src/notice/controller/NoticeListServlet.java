@@ -38,7 +38,7 @@ public class NoticeListServlet extends HttpServlet {
 		
 		request.setAttribute("list", list);
 		
-		RequestDispatcher view = request.getRequestDispatcher("/views/notice/noticeListView.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("/views/notice/noticeListView2.jsp");
 		view.forward(request, response);
 	}
 

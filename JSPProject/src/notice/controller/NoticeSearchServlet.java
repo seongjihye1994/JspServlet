@@ -48,7 +48,7 @@ public class NoticeSearchServlet extends HttpServlet {
 		request.setAttribute("searchCondition", searchCondition);
 		request.setAttribute("search", search);
 		
-		request.getRequestDispatcher("/views/notice/noticeListView.jsp").forward(request, response);
+		request.getRequestDispatcher("/views/notice/noticeListView2.jsp").forward(request, response);
 	}
 
 	/**
